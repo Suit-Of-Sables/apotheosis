@@ -6,7 +6,7 @@ def find(artist_data, lastfm, config):
     similar = lastfm.get_artist(artist_data['name']).get_similar()
     similar = similar[:int(config['DEFAULT']['max_to_add'])]
 
-    # find all artists that meed min_score
+    # find all artists that meet min_score
     new_similar = []
     for artist in similar:
         if artist[1] >= float(config['DEFAULT']['min_score']):
