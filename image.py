@@ -36,9 +36,9 @@ def edit(artist_data, image, pth, config):
     r = pth.session.post(config['pth']['artist_page'], data=data)
 
 def clean_body(body):
-    body = body.replace('< /br>', '\n')
+    body = body.replace('<br />', '\n')
     body = body.replace('<a rel="noreferrer" target="_blank" href="', '[url=')
-    body = body.replace('>Read', ']Read')
+    body = body.replace('">Read', ']Read')
     body = body.replace('</a>', '[/url]')
     body = body.replace('<span class="size1">', '[size=1]')
     body = body.replace('</span>', '[/size]')
