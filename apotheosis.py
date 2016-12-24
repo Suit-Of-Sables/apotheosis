@@ -48,5 +48,7 @@ def main():
         print "Artist bio is missing..."
         bio.add(artist_data, lastfm, pth, config)
 
+    pth.logout()
+
 if __name__ == '__main__':
     main()
