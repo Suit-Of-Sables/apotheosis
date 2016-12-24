@@ -26,4 +26,4 @@ Copy and fill out the config file
 You'll need a last.fm api account for some of the keys
 
 Example Usage:
-<code>python ./apotheosis 1234 #run script on artist with id=1234</code>
+<code>./apotheosis 1234 #run script on artist with id=1234</code>
