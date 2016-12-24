@@ -23,10 +23,24 @@ def get(artist_name, lastfm):
 
 def edit(artist_data, image, pth, config):
     print "Adding artist image from last.fm!"
+
+    body = artist_data['body']
+    body = clean_body(body)
+
     data = {'action' : 'edit',
             'auth' : config['pth']['auth'],
             'artistid' : artist_data['id'],
-            'body' : artist_data['body'],
+            'body' : body,
             'image' : image,
             'summary' : 'added artist bio from last.fm'}
     r = pth.session.post(config['pth']['artist_page'], data=data)
+
+def clean_body(body):
+    body = body.replace('< /br>', '\n')
+    body = body.replace('<a rel="noreferrer" target="_blank" href="', '[url=')
+    body = body.replace('>Read', ']Read')
+    body = body.replace('</a>', '[/url]')
+    body = body.replace('<span class="size1">', '[size=1]')
+    body = body.replace('</span>', '[/size]')
+
+    return body
