@@ -1,0 +1,20 @@
+[DEFAULT]
+# similar artists must have this min score
+min_score: 0.3333
+# add no more than this many similar artists
+max_to_add: 10
+
+[pth]
+username: 
+password: 
+# you can find this inspecting the html of an edit form on the site
+# are these unique for each user?
+auth:
+artist_page: https://passtheheadphones.me/artist.php
+
+[last.fm]
+# You need to create a last.fm api account to get these keys
+# You have to have your own unique two values for API_KEY and API_SECRET
+# Obtain yours from http://www.last.fm/api/account for Last.fm
+API_KEY: 
+API_SECRET:
