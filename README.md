@@ -33,4 +33,4 @@ Runs script on artist with id=1234
 Here's a [browser script](https://greasyfork.org/en/scripts/25992-pth-apotheosis-link-creator) that will add an 'Apotheosis' link at the top of the artist's page.
 ![Apotheosis Command Link](https://ptpimg.me/wann7v.png)
 
-Clicking the link we copy the command to run the script on that artist just like in the above usage example.
+Clicking the link will copy the command to run the script on that artist just like in the above usage example.
