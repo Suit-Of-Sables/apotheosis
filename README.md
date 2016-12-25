@@ -23,7 +23,7 @@ The issue is that the api will give you the bio (called 'body') in XML but if yo
 
 4. If you are a PTP member you can make a [ptpimg account](https://ptpimg.me) to take advantage of the rehosting feature.
 
-5. copy and fill out the config file<code>$ cp config.py.template config.py</code>
+5. copy and fill out the config file (remember to quote all strings!) <code>$ cp config.py.template config.py</code>
 
 Example Usage: <code>$ ./apotheosis 1234 </code>
 Runs script on artist with id=1234
