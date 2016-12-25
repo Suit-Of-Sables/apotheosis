@@ -21,3 +21,9 @@ api_secret =
 min_score = 0.3333
 # add no more than this many similar artists
 max_to_add = 10
+
+
+#[image]
+# Can be found inspecting the html on your ptpimg upload page
+# Leave this as None if you don't have a ptpimg account
+ptpimg_api_key = None

@@ -1,12 +1,16 @@
-def missing(artist_data):
-    return artist_data['image'] == ''
+import requests
 
-def add(artist_data, lastfm, pth, config):
-    image = get(artist_data['name'], lastfm)
-    if image == None:
-        print "Failed to get img from last.fm :("
-        return
-    edit(artist_data, image, pth, config)
+# The hardcoded URLs should end up in a config file
+
+def missing(image):
+    return image == ''
+
+def bad_host(image):
+    # do I have to worry about http being used instead of https?:
+    if image.startswith('http://ptpimg.me/') or image.startswith('https://ptpimg.me/'):
+        return False
+    else:
+        return True
 
 def get(artist_name, lastfm):
     try:
@@ -21,19 +25,18 @@ def get(artist_name, lastfm):
                 return None
     return image
 
-def edit(artist_data, image, pth, config):
-    print "Adding artist image from last.fm!"
+def edit(artist, artist_page, image, pth, auth):
 
-    body = artist_data['body']
-    body = clean_body(body)
+    artist['body'] = clean_body(artist['body'])
 
     data = {'action' : 'edit',
-            'auth' : config.pth_auth,
-            'artistid' : artist_data['id'],
-            'body' : body,
+            'auth' : auth,
+            'artistid' : artist['id'],
+            'body' : artist['body'],
             'image' : image,
             'summary' : 'added artist bio from last.fm'}
-    r = pth.session.post(config.artist_page, data=data)
+
+    r = pth.session.post(artist_page, data=data)
 
 def clean_body(body):
     body = body.replace('<br />', '')
@@ -44,3 +47,16 @@ def clean_body(body):
     body = body.replace('</span>', '[/size]')
 
     return body
+
+def rehost(img, api_key):
+    data = {'link-upload' : img,
+            'api_key' : api_key}
+    r = requests.post('https://ptpimg.me/upload.php', data=data)
+    if r.status_code != 200:
+        return None
+
+    rjson = r.json()[0]
+
+    rehosted_img = "https://ptpimg.me/{0}.{1}".format( rjson['code'], rjson['ext'])
+
+    return rehosted_img

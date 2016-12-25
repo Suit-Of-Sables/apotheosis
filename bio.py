@@ -6,8 +6,8 @@ def missing(artist_data):
 def add(artist_data, lastfm, pth, config):
     bio = get(artist_data['name'], lastfm)
     if bio == None:
-        print "Failed to get bio :("
-        print "Perhaps there is no bio for this artist on last.fm right now."
+        print "failed to get bio :("
+        print "Perhaps there is no bio for this artist on last.fm right now.(?)\n"
         return          # failed to get bio
     bio = to_bbcode(bio)
     edit(artist_data, bio, pth, config)
@@ -28,7 +28,7 @@ def to_bbcode(bio):
     return bio
 
 def edit(artist_data, bio, pth, config):
-    print "Adding bio from last.fm!"
+    print "adding bio from last.fm!"
     data = {'action' : 'edit',
             'auth' : config.pth_auth,
             'artistid' : artist_data['id'],

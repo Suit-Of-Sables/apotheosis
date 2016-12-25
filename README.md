@@ -19,9 +19,11 @@ The issue is that the api will give you the bio (called 'body') in XML but if yo
 
 2. install pylast <code>$ pip install --user pylast</code>
 
-3. make a [last.fm API account](http://www.last.fm/api) (you'll need the auth keys for the config)
+3. make a [last.fm API account](https://www.last.fm/api) (you'll need the auth keys for the config)
 
-4. copy and fill out the config file<code>$ cp config.py.template config.py</code>
+4. If you are a PTP member you can make a [ptpime.me account](https://ptpime.me) to take advantage of the rehosting feature.
+
+5. copy and fill out the config file<code>$ cp config.py.template config.py</code>
 
 Example Usage: <code>$ ./apotheosis 1234 </code>
 Runs script on artist with id=1234
