@@ -21,7 +21,7 @@ The issue is that the api will give you the bio (called 'body') in XML but if yo
 
 3. make a [last.fm API account](http://www.last.fm/api) (you'll need the auth keys for the config)
 
-5. copy and fill out the config file<code>$ cp config.py.template config.py</code>
+4. copy and fill out the config file<code>$ cp config.py.template config.py</code>
 
 Example Usage: <code>$ ./apotheosis 1234 </code>
 Runs script on artist with id=1234
