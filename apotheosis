@@ -2,7 +2,7 @@
 
 import pylast       # pip install pylast
 import sys
-import configparser
+import config
 import pthapi   # local copy, taken from what I was using with pthbetter
 # would prefer libpth but can't get to api.API from the version on github :/
 #import libpth
@@ -14,18 +14,14 @@ import image            # get image from last.fm if it's missing on PTH
 # USE: python apotheosis.py 1234
 # RESULT: runs imported apotheosis modules on artist with id 1234 on PTH
 def main():
-    # Please see apotheosis.config for more info on config settings
-    config = configparser.ConfigParser()
-    config.read('apotheosis.config')
-
     artist_id = sys.argv[1]     # ID of artist to find similar artists for
 
     # last.fm connection
-    lastfm = pylast.LastFMNetwork(api_key=config['last.fm']['API_KEY'],
-                                  api_secret=config['last.fm']['API_KEY'])
+    lastfm = pylast.LastFMNetwork(api_key=config.api_key,
+                                  api_secret=config.api_secret)
 
     # pth connection
-    pth = pthapi.PthAPI(config['pth']['username'], config['pth']['password'])
+    pth = pthapi.PthAPI(config.pth_username, config.pth_password)
 
     # get artist name and info from id
     artist_data = pth.request("artist", id=artist_id)

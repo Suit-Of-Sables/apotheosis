@@ -30,9 +30,9 @@ def to_bbcode(bio):
 def edit(artist_data, bio, pth, config):
     print "Adding bio from last.fm!"
     data = {'action' : 'edit',
-            'auth' : config['pth']['auth'],
+            'auth' : config.pth_auth,
             'artistid' : artist_data['id'],
             'body' : bio,
             'image' : artist_data['image'],
             'summary' : 'added artist bio from last.fm'}
-    r = pth.session.post(config['pth']['artist_page'], data=data)
+    r = pth.session.post(config.artist_page, data=data)

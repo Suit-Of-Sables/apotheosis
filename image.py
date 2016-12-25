@@ -28,12 +28,12 @@ def edit(artist_data, image, pth, config):
     body = clean_body(body)
 
     data = {'action' : 'edit',
-            'auth' : config['pth']['auth'],
+            'auth' : config.pth_auth,
             'artistid' : artist_data['id'],
             'body' : body,
             'image' : image,
             'summary' : 'added artist bio from last.fm'}
-    r = pth.session.post(config['pth']['artist_page'], data=data)
+    r = pth.session.post(config.artist_page, data=data)
 
 def clean_body(body):
     body = body.replace('<br />', '')
