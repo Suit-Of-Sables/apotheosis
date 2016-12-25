@@ -21,7 +21,7 @@ The issue is that the api will give you the bio (called 'body') in XML but if yo
 
 3. make a [last.fm API account](https://www.last.fm/api) (you'll need the auth keys for the config)
 
-4. If you are a PTP member you can make a [ptpime.me account](https://ptpime.me) to take advantage of the rehosting feature.
+4. If you are a PTP member you can make a [ptpime account](https://ptpimg.me) to take advantage of the rehosting feature.
 
 5. copy and fill out the config file<code>$ cp config.py.template config.py</code>
 
