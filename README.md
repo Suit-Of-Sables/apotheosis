@@ -3,7 +3,9 @@ pull info from last.fm to populate an artist page on PTH
 
 * Add similar artists
 * Add missing artist bio
-* Add missing artist image (a next step would be to host it to ptpimg.me first or rehost an existing image)
+* Add missing artist image
+* Add missing cover art for all albums in artist's discography (!)
+* All images, new or existing, are rehosted on ptpimg if on a bad host
 
 There are still bugs to be found.
 

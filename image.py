@@ -1,4 +1,5 @@
 import requests
+from config import artist_page, pth_auth, ptpimg_api_key
 
 # The hardcoded URLs should end up in a config file
 
@@ -12,25 +13,28 @@ def bad_host(image):
     else:
         return True
 
-def get(artist_name, lastfm):
-    try:
-        image = lastfm.get_artist(artist_name).get_cover_image(size=4)
-    except:
+def get(lastfm, artist_name, album_name=None):
+    if (album_name == None):
+        image_source = lastfm.get_artist(artist_name)
+    else:
+        image_source = lastfm.get_album(artist_name, album_name)
+
+    image = None
+    for i in [4,3,2,1]:
         try:
-            image = lastfm.get_artist(artist_name).get_cover_image(size=3)
+            image = image_source.get_cover_image(size=i)
+            if image != None:
+                break
         except:
-            try:
-                image = lastfm.get_artist(artist_name).get_cover_image(size=2)
-            except:
-                return None
+            pass
     return image
 
-def edit(artist, artist_page, image, pth, auth):
+def edit(artist, image, pth):
 
     artist['body'] = clean_body(artist['body'])
 
     data = {'action' : 'edit',
-            'auth' : auth,
+            'auth' : pth_auth,
             'artistid' : artist['id'],
             'body' : artist['body'],
             'image' : image,
@@ -48,9 +52,9 @@ def clean_body(body):
 
     return body
 
-def rehost(img, api_key):
+def rehost(img):
     data = {'link-upload' : img,
-            'api_key' : api_key}
+            'api_key' : ptpimg_api_key}
     r = requests.post('https://ptpimg.me/upload.php', data=data)
     if r.status_code != 200:
         return None

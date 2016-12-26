@@ -10,6 +10,7 @@ import pthapi   # local copy, taken from what I was using with pthbetter
 import bio              # get bio from last.fm if it's empty on PTH
 import similar          # get similar artists from lastfm
 import image            # get image from last.fm if it's missing on PTH
+import albums
 
 # USE: python apotheosis.py 1234
 # RESULT: runs imported apotheosis modules on artist with id 1234 on PTH
@@ -29,14 +30,15 @@ def main():
     print "Apotheosis of Artist:", artist['name'], '\n'
     new_similar = similar.find(artist, lastfm, config)
 
-    print "New similar artists to add:",
-    print ", ".join(new_similar), '\n'
+    print "SIMILAR ARTISTS\n"
+    print "\n".join(new_similar), '\n'
     similar.add(artist, new_similar, pth, config)
 
+    print "ARTIST IMAGE\n"
     # if no artist image, rehost one from last.fm and add it
     if image.missing(artist['image']):
         print "Artist image is missing ...",
-        scraped_image = image.get(artist['name'], lastfm)
+        scraped_image = image.get(lastfm, artist['name'])
         if scraped_image == None:
             print "failed to get image from last.fm :(\n"
         else:
@@ -45,7 +47,7 @@ def main():
 
             if (config.ptpimg_api_key != None):
 
-                rehosted_image = image.rehost(scraped_image, config.ptpimg_api_key)
+                rehosted_image = image.rehost(scraped_image)
 
                 if (rehosted_image == None):
                     print "failed to rehost image :()\n"
@@ -58,7 +60,7 @@ def main():
                 print "can't rehost image :( (no api key in config)\n"
                 print "adding image from original host ...",
 
-            image.edit(artist, config.artist_page, image_to_add, pth, config.pth_auth)
+            image.edit(artist, image_to_add, pth)
             # need to add check here for possible error
             print "new artist image added!\n"
 
@@ -66,21 +68,25 @@ def main():
     # if bad host, rehost it and add it
     elif image.bad_host(artist['image']) and config.ptpimg_api_key != None:
         print "Artist image is on a bad host (%s) ...",
-        rehosted_image = image.rehost(artist['image'], config.ptpimg_api_key)
+        rehosted_image = image.rehost(artist['image'])
         if (rehosted_image == None):
             print "failed to rehost image :()"
         else:
-            image.edit(artist, config.artist_page, rehosted_image, pth, config.pth_auth)
+            image.edit(artist, rehosted_image, pth)
             # need to add check here for possible error
             print "rehosted artist image!"
 
     # update artist data incase it changed
     artist = pth.request("artist", id=artist_id)
 
+    print "ARTIST BIO\n"
     # if no artist bio, add the one on last.fm
     if bio.missing(artist):
         print "Artist bio is missing ...",
         bio.add(artist, lastfm, pth, config)
+
+    print ""
+    albums.get_covers(artist, lastfm, pth)
 
     pth.logout()
 
