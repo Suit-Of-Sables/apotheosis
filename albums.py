@@ -20,6 +20,7 @@ def get_covers(artist, lastfm, pth):
             if image_to_rehost == None:
                 print "failed to get new image :( Is unicode causing a problem?\n"
                 continue
+            print "found...",
         else:
             print group['groupName']
             print cur_image

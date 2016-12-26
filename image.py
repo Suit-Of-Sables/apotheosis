@@ -1,4 +1,6 @@
 import requests
+import mechanize
+from cStringIO import StringIO
 from config import artist_page, pth_auth, ptpimg_api_key
 
 # The hardcoded URLs should end up in a config file
@@ -29,28 +31,26 @@ def get(lastfm, artist_name, album_name=None):
             pass
     return image
 
-def edit(artist, image, pth):
+def edit(artist, new_image, pth):
 
-    artist['body'] = clean_body(artist['body'])
+    url = artist_page + '?action=edit&artistid=%s' % artist['id']
+    print url
+    r = pth.session.get(url, data={'auth': pth_auth})
+    forms = mechanize.ParseFile(StringIO(r.text.encode('utf-8')), url)
 
-    data = {'action' : 'edit',
-            'auth' : pth_auth,
-            'artistid' : artist['id'],
-            'body' : artist['body'],
-            'image' : image,
-            'summary' : 'added artist bio from last.fm'}
+    form = None
+    for f in forms:
+        try:
+            if f.find_control('image'):
+                form = f
+                break
+        except:
+            pass
 
-    r = pth.session.post(artist_page, data=data)
-
-def clean_body(body):
-    body = body.replace('<br />', '')
-    body = body.replace('<a rel="noreferrer" target="_blank" href="', '[url=')
-    body = body.replace('">Read', ']Read')
-    body = body.replace('</a>', '[/url]')
-    body = body.replace('<span class="size1">', '[size=1]')
-    body = body.replace('</span>', '[/size]')
-
-    return body
+    form['image'] = new_image
+    form['summary'] = 'added rehosted image from last.fm'
+    _, data, headers = form.click_request_data()
+    pth.session.post(url, data=data, headers=dict(headers))
 
 def rehost(img):
     data = {'link-upload' : img,
