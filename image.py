@@ -52,8 +52,11 @@ def edit(artist, new_image, pth):
     _, data, headers = form.click_request_data()
     pth.session.post(url, data=data, headers=dict(headers))
 
-def rehost(img):
-    data = {'link-upload' : img,
+def rehost(image_url):
+    if image_url.find('discogs') != -1:
+        image_url = 'http://reho.st/' + image_url
+
+    data = {'link-upload' : image_url,
             'api_key' : ptpimg_api_key}
     r = requests.post('https://ptpimg.me/upload.php', data=data)
     if r.status_code != 200:
