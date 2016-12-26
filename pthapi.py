@@ -48,7 +48,7 @@ formats = {
         'encoding' : '320'
     },
     'V2': {
-        'format' : 'MP3', 
+        'format' : 'MP3',
         'encoding' : 'V2 (VBR)'
     },
 }
@@ -115,9 +115,9 @@ class PthAPI:
                 raise RequestException
             return parsed['response']
         except ValueError:
-            return -1 
+            return -1
             raise RequestException
-    
+
     def get_artist(self, id=None, format='MP3', best_seeded=True):
         res = self.request('artist', id=id)
         torrentgroups = res['torrentgroup']
@@ -143,12 +143,12 @@ class PthAPI:
     def get_candidates(self, skip=None, media=lossless_media, source='snatched'):
         if not media.issubset(lossless_media):
             raise ValueError('Unsupported media type %s' % (media - lossless_media).pop())
-            
+
         if media == lossless_media:
             media_params = ['']
         else:
             media_params = ['&media=%s' % media_search_map[m] for m in media]
-            
+
         url = 'https://passtheheadphones.me/torrents.php?type=%s&userid=%s&format=FLAC' % (source, self.userid)
         for mp in media_params:
             page = 1

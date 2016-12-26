@@ -9,11 +9,26 @@ def missing(image):
     return image == ''
 
 def bad_host(image):
-    # do I have to worry about http being used instead of https?:
-    if image.startswith('http://ptpimg.me/') or image.startswith('https://ptpimg.me/'):
+    # are there any other white-listed hosts?:
+    if image.find('ptpimg.me'):
         return False
+    elif broken_link(image):
+        return False            #broken links are a different problem
     else:
         return True
+
+def broken_link(image):
+    try:
+        r = requests.head(image)
+    except:
+        return True
+    if r.status_code >= 400:
+        return True
+    else:
+        return False
+
+def is_fine(image):
+    return not missing(image) and not bad_host(image) and not broken_link(image)
 
 def get(lastfm, artist_name, album_name=None):
     if (album_name == None):
@@ -34,7 +49,6 @@ def get(lastfm, artist_name, album_name=None):
 def edit(artist, new_image, pth):
 
     url = artist_page + '?action=edit&artistid=%s' % artist['id']
-    print url
     r = pth.session.get(url, data={'auth': pth_auth})
     forms = mechanize.ParseFile(StringIO(r.text.encode('utf-8')), url)
 

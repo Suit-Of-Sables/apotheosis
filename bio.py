@@ -17,6 +17,7 @@ def get(artist_name, lastfm):
         bio = lastfm.get_artist(artist_name).get_bio('content')
     except:
         return None
+    print "found ...",
     return bio
 
 def to_bbcode(bio):
@@ -28,7 +29,6 @@ def to_bbcode(bio):
     return bio
 
 def edit(artist_data, bio, pth, config):
-    print "adding bio from last.fm!"
     data = {'action' : 'edit',
             'auth' : config.pth_auth,
             'artistid' : artist_data['id'],
@@ -36,3 +36,4 @@ def edit(artist_data, bio, pth, config):
             'image' : artist_data['image'],
             'summary' : 'added artist bio from last.fm'}
     r = pth.session.post(config.artist_page, data=data)
+    print "added!"

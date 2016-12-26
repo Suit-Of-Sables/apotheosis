@@ -9,33 +9,43 @@ def get_covers(artist, lastfm, pth):
     for group in groups:
         cur_image = group['wikiImage']
 
-        if not image.missing(cur_image) and not image.bad_host(cur_image):
+        if image.is_fine(cur_image):
             continue
 
-        elif image.missing(cur_image):
-            print group['groupName']
-            print "missing...",
+        #Everything is not fine!!
+        print group['groupName']
+        if image.missing(cur_image) or image.broken_link(cur_image):
+            if image.missing(cur_image):
+                print "missing ...",
+
+            elif image.broken_link(cur_image):
+                print "broken link ...",
+
             image_to_rehost = image.get(lastfm, artist['name'], group['groupName'])
 
             if image_to_rehost == None:
-                print "failed to get new image :( Is unicode causing a problem?\n"
+                print "failed to get new image :( Nothing on Last.fm?\n"
                 continue
-            print "found...",
-        else:
-            print group['groupName']
+            else:
+                print "found ...",
+
+        if image.bad_host(cur_image):
             print cur_image
-            print "bad host...",
+            print "bad host ...",
             image_to_rehost = cur_image
 
-        print "rehosting...",
+        print "rehosting ...",
+
         rehosted_image = image.rehost(image_to_rehost)
 
         if rehosted_image == None:
-            print "failed to rehost image :( Some discog URLs seem to be a problem...\n"
+            print "failed to rehost image :( What could be the problem?\n"
             continue
-        print "rehosted!\n"
+        else:
+            print "adding ...",
 
-
+        # image.py uses something almost identical
+        # they should be collapsed into one function
         url = "https://passtheheadphones.me/torrents.php?action=editgroup&groupid=%s" % group['groupId']
         r = pth.session.get(url, data={'auth': pth_auth})
         forms = mechanize.ParseFile(StringIO(r.text.encode('utf-8')), url)
@@ -52,3 +62,4 @@ def get_covers(artist, lastfm, pth):
         form['summary'] = 'added rehosted image from last.fm'
         _, data, headers = form.click_request_data()
         pth.session.post(url, data=data, headers=dict(headers))
+        print "done!\n"
