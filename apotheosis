@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import pylast          # pip install pylast
 import sys
 from HTMLParser import HTMLParser

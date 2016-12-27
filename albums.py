@@ -18,13 +18,11 @@ def get_covers(artist, lastfm, pth):
 
         #Everything is not fine!!
         print parser.unescape(group['groupName'])
-        if image.missing(cur_image) or image.broken_link(cur_image):
+        if image.needs_new(cur_image):
             if image.missing(cur_image):
                 print "missing ...",
-
             elif image.broken_link(cur_image):
                 print "broken link ...",
-
 
             image_to_rehost = image.get(lastfm, artist['name'], group['groupName'])
 
@@ -34,7 +32,7 @@ def get_covers(artist, lastfm, pth):
             else:
                 print "found ...",
 
-        if image.bad_host(cur_image) and pth_auth != None:
+        if image.needs_rehost(cur_image) and pth_auth != None:
             print cur_image
             print "bad host ...",
             image_to_rehost = cur_image

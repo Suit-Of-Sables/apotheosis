@@ -5,8 +5,7 @@ def find(artist_data, lastfm):
     cur_similar = [a['name'] for a in artist_data["similarArtists"]]
 
     # get list of at most max_to_add similar artist from last.fm
-    new_similar = lastfm.get_artist(artist_data['name']).get_similar()
-    new_similar = new_similar[:max_to_add]
+    new_similar = lastfm.get_artist(artist_data['name']).get_similar(limit=max_to_add)
 
     # find all artists that meet min_score
     new_similar = [a[0].name for a in new_similar if a[1] >= min_score]
