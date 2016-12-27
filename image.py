@@ -10,7 +10,7 @@ def missing(image):
 
 def bad_host(image):
     # are there any other white-listed hosts?:
-    if image.find('ptpimg.me'):
+    if image.find('ptpimg.me') != -1:
         return False
     elif broken_link(image):
         return False            #broken links are a different problem

@@ -51,11 +51,8 @@ def main():
                     print "adding image from original host instead ...",
                 else:
                     image_to_add = rehosted_image
-                    print "adding ...",
 
-            else:
-                print "can't rehost image :( (no api key in config)\n"
-                print "adding image from original host ...",
+            print "adding ...",
 
             image.edit(artist, image_to_add, pth)
             # need to add check here for possible error
@@ -70,7 +67,7 @@ def main():
         if (rehosted_image == None):
             print "failed to rehost image :()"
         else:
-            print "addin ...",
+            print "adding ...",
             image.edit(artist, rehosted_image, pth)
             # need to add check here for possible error
             print "done!\n"

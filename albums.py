@@ -21,6 +21,7 @@ def get_covers(artist, lastfm, pth):
             elif image.broken_link(cur_image):
                 print "broken link ...",
 
+
             image_to_rehost = image.get(lastfm, artist['name'], group['groupName'])
 
             if image_to_rehost == None:
@@ -29,18 +30,18 @@ def get_covers(artist, lastfm, pth):
             else:
                 print "found ...",
 
-        if image.bad_host(cur_image):
+        if image.bad_host(cur_image) and pth_auth != None:
             print cur_image
             print "bad host ...",
             image_to_rehost = cur_image
 
-        print "rehosting ...",
+        if pth_auth != None:
+            print "rehosting ...",
+            rehosted_image = image.rehost(image_to_rehost)
 
-        rehosted_image = image.rehost(image_to_rehost)
-
-        if rehosted_image == None:
-            print "failed to rehost image :( What could be the problem?\n"
-            continue
+            if rehosted_image == None:
+                print "failed to rehost image :( What could be the problem?\n"
+                continue
         else:
             print "adding ...",
 
