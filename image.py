@@ -2,33 +2,22 @@ import requests
 import mechanize
 from contextlib2 import suppress
 from cStringIO import StringIO
-from config import artist_page, pth_auth, ptpimg_api_key
-
-# The hardcoded URLs should end up in a config file
+from classes import Artist, Album
+from config import artist_page, torrents_page, pth_auth, ptpimg_api_key
 
 def missing(image):
     return image == ''
 
 def bad_host(image):
     # are there any other white-listed hosts?:
-    return image.find('ptpimg.me') == -1
-
-#
-#        return False
-#    elif broken_link(image):
-#        return False            #broken links are a different problem
-#    else:
-#        return True
+    return image.find('ptpimg.me') == -1 and image.find('i.imgur.com') == -1
 
 def broken_link(image):
     try:
         r = requests.head(image)
     except:
         return True
-    if r.status_code >= 400:
-        return True
-    else:
-        return False
+    return True if r.status_code >= 400 else False
 
 def needs_rehost(image):
     return bad_host(image) and not broken_link(image)
@@ -39,36 +28,35 @@ def needs_new(image):
 def is_fine(image):
     return not missing(image) and not bad_host(image) and not broken_link(image)
 
-def get(lastfm, artist_name, album_name=None):
-    if (album_name == None):
-        image_source = lastfm.get_artist(artist_name)
-    else:
-        image_source = lastfm.get_album(artist_name, album_name)
+def get_new_image(target, lastfm):
+    cur_image = target.image
+    if missing(cur_image):
+        print "missing ...",
+    elif broken_link(cur_image):
+        print "broken link ...",
+    scraped_image = get(target, lastfm)
+    return scraped_image
+
+def get(target, lastfm):
+
+    image_source = get_image_source(target, lastfm)
 
     image = None
     for i in reversed(xrange(1,5)):
         with suppress(Exception):
             image = image_source.get_cover_image(size=i)
-            if image != None:
-                break
+            break
     return image
 
-def edit(artist, new_image, pth):
+def edit(target, pth):
 
-    url = artist_page + '?action=edit&artistid=%s' % artist['id']
+    url = target.edit_url
     r = pth.session.get(url, data={'auth': pth_auth})
     forms = mechanize.ParseFile(StringIO(r.text.encode('utf-8')), url)
 
-    form = None
-    for f in forms:
-        try:
-            if f.find_control('image'):
-                form = f
-                break
-        except:
-            pass
+    form = get_image_field(forms)
 
-    form['image'] = new_image
+    form['image'] = target.image
     form['summary'] = 'added rehosted image from last.fm'
     _, data, headers = form.click_request_data()
     pth.session.post(url, data=data, headers=dict(headers))
@@ -94,3 +82,43 @@ def get_usable_url(image_url):
     elif image_url.find('cps-static') != -1:
         image_url = image_url[:image_url.find('?')]
     return image_url
+
+def get_image_field(forms):
+    form = None
+    for f in forms:
+        with suppress(Exception):
+            if f.find_control('image'):
+                form = f
+    return form
+
+def get_image_source(target, lastfm):
+    if isinstance(target, Artist):
+        image_source = lastfm.get_artist(target.name)
+    elif isinstance(target, Album):
+        image_source = lastfm.get_album(target.artist_name, target.name)
+    return image_source
+
+def fix(target, pth, lastfm):
+        if needs_new(target.image):
+            target.image = get_new_image(target, lastfm)
+            if target.image == None:
+                print "failed to get new image :( Nothing on Last.fm?\n"
+                return
+            else:
+                print "found ...",
+                new_image = True
+        else:
+            new_image = False
+        if pth_auth != None:
+            if needs_rehost(target.image):
+                if not new_image:
+                    print target.image
+                    print "bad host ...",
+                    print "rehosting ...",
+                target.image = rehost(target.image)
+                if target.image == None:
+                    print "failed to rehost image :( What could be the problem?\n"
+                    return
+        print "adding ...",
+        edit(target, pth)
+        print "done!\n"
