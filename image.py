@@ -13,6 +13,7 @@ def bad_host(image):
     return image.find('ptpimg.me') == -1 and image.find('i.imgur.com') == -1
 
 def broken_link(image):
+    #should albumartexchange.com images be considered broken? Are they all watermarked?
     try:
         r = requests.head(image)
     except:
@@ -79,7 +80,7 @@ def rehost(image_url):
 def get_usable_url(image_url):
     if image_url.find('discogs') != -1:
         image_url = 'http://reho.st/' + image_url
-    elif image_url.find('cps-static') != -1:
+    elif image_url.find('cps-static') != -1 or image_url.find('metal-archives'):
         image_url = image_url[:image_url.find('?')]
     return image_url
 
