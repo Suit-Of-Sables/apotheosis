@@ -74,11 +74,7 @@ def edit(artist, new_image, pth):
     pth.session.post(url, data=data, headers=dict(headers))
 
 def rehost(image_url):
-    # troublesome hosts...
-    if image_url.find('discogs') != -1:
-        image_url = 'http://reho.st/' + image_url
-    elif image_url.find('cps-static') != -1:
-        image_url = image_url[:image_url.find('?')]
+    image_url = get_usable_url(image_url)
 
     data = {'link-upload' : image_url,
             'api_key' : ptpimg_api_key}
@@ -91,3 +87,10 @@ def rehost(image_url):
     rehosted_img = "https://ptpimg.me/{0}.{1}".format( rjson['code'], rjson['ext'])
 
     return rehosted_img
+
+def get_usable_url(image_url):
+    if image_url.find('discogs') != -1:
+        image_url = 'http://reho.st/' + image_url
+    elif image_url.find('cps-static') != -1:
+        image_url = image_url[:image_url.find('?')]
+    return image_url

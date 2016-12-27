@@ -12,7 +12,7 @@ There are still bugs to be found. Please add any you come across to Issues.
 
 1. clone the [github repo](https://github.com/Suit-Of-Sables/apotheosis)
 
-2. install pylast <code>$ pip install --user pylast</code>
+2. install pylast and contextlib2 <code>$ pip install --user pylast contextlib2</code>
 
 3. make a [last.fm API account](https://www.last.fm/api) (you'll need the auth keys for the config)
 
