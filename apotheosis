@@ -2,6 +2,7 @@
 
 import pylast          # pip install pylast
 import sys
+from HTMLParser import HTMLParser
 import config           # confi file
 import pthapi           # local copy, taken from what I was using with pthbetter
 import bio              # get bio from last.fm if it's empty on PTH
@@ -14,6 +15,8 @@ import albums           # get album covers for artists discography
 def main():
     artist_id = sys.argv[1]     # ID of artist to find similar artists for
 
+    parser = HTMLParser()
+
     # last.fm connection
     lastfm = pylast.LastFMNetwork(api_key=config.api_key,
                                   api_secret=config.api_secret)
@@ -24,12 +27,13 @@ def main():
     # get artist name and info from id
     artist = pth.request("artist", id=artist_id)
 
-    print "Apotheosis of Artist:", artist['name'], '\n'
-    new_similar = similar.find(artist, lastfm, config)
+    print "Apotheosis of Artist:", parser.unescape(artist['name']), '\n'
+
 
     print "SIMILAR ARTISTS\n"
-    print "\n".join(new_similar), '\n'
-    similar.add(artist, new_similar, pth, config)
+    new_similar = similar.find(artist, lastfm)
+    similar.add(artist, new_similar, pth)
+    print parser.unescape("\n".join(new_similar)), '\n'
 
     print "ARTIST IMAGE\n"
     # if no artist image, rehost one from last.fm and add it

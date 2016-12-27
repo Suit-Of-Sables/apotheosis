@@ -1,3 +1,4 @@
+from HTMLParser import HTMLParser
 import mechanize
 import image
 from config import pth_auth
@@ -6,6 +7,9 @@ from cStringIO import StringIO
 def get_covers(artist, lastfm, pth):
     print"ALBUM COVERS\n"
     groups = artist['torrentgroup']
+
+    parser = HTMLParser()
+
     for group in groups:
         cur_image = group['wikiImage']
 
@@ -13,7 +17,7 @@ def get_covers(artist, lastfm, pth):
             continue
 
         #Everything is not fine!!
-        print group['groupName']
+        print parser.unescape(group['groupName'])
         if image.missing(cur_image) or image.broken_link(cur_image):
             if image.missing(cur_image):
                 print "missing ...",
@@ -52,6 +56,7 @@ def get_covers(artist, lastfm, pth):
         forms = mechanize.ParseFile(StringIO(r.text.encode('utf-8')), url)
 
         form = None
+        # for f in iter(forms, f.find_control('image') == True)
         for f in forms:
             try:
                 if f.find_control('image'):
