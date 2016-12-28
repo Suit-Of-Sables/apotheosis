@@ -3,7 +3,6 @@ import mechanize
 import image
 from classes import Album
 from config import pth_auth
-from utils import get_dict_type
 from cStringIO import StringIO
 
 parser = HTMLParser()
