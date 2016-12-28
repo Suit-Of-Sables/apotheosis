@@ -78,9 +78,9 @@ def rehost(image_url):
     return rehosted_img
 
 def get_usable_url(image_url):
-    if image_url.find('discogs') != -1:
+    if image_url.find('discogs') != -1 or image_url.find('metal-archives') != -1:
         image_url = 'http://reho.st/' + image_url
-    elif image_url.find('cps-static') != -1 or image_url.find('metal-archives'):
+    if image_url.find('cps-static') != -1 or image_url.find('metal-archives') != -1:
         image_url = image_url[:image_url.find('?')]
     return image_url
 
