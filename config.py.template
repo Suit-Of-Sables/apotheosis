@@ -9,6 +9,7 @@ pth_password =
 pth_auth =
 # no need to change artist_page
 artist_page = 'https://passtheheadphones.me/artist.php'
+torrents_page = 'https://passtheheadphones.me/torrents.php'
 
 #[last.fm]
 # You have to have your own unique two values for API_KEY and API_SECRET
