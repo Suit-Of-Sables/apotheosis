@@ -34,7 +34,8 @@ class Collage():
         self.desc = info['description']
         self.albums = info['torrentgroups']
         for album in self.albums:
-            artist = album['musicInfo']['artists'][0]['name']
+            artists = album['musicInfo']['artists']
+            artist = artists[0]['name'] if len(artists) > 0 else 'Various Artists'
             album.update({'artist_name': artist})
             album['groupName'] = album['name']
             del album['name']
