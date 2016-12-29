@@ -7,6 +7,7 @@ from cStringIO import StringIO
 
 parser = HTMLParser()
 
+
 def get_covers(artist, pth, lastfm):
 
     for album in artist.albums:
