@@ -1,4 +1,4 @@
-from config import max_to_add, min_score, artist_page, pth_auth
+from config import max_to_add, min_score, artist_page
 
 def find(artist, lastfm):
     # get list of current similar artists on PTH
@@ -18,7 +18,7 @@ def find(artist, lastfm):
 def add(artist, new_similar, pth):
 
     data = {'action' : 'add_similar',
-            'auth' : pth_auth,
+            'auth' : pth.authkey,
             'artistid' : artist.id,
             'artistname': ''}
 
