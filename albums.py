@@ -2,7 +2,6 @@ from HTMLParser import HTMLParser
 import mechanize
 import image
 from classes import Album
-from config import pth_auth
 from cStringIO import StringIO
 
 parser = HTMLParser()

@@ -1,5 +1,5 @@
 from re import sub
-from config import pth_auth, artist_page
+from config import artist_page
 
 def missing(artist):
     return artist.bio == ''
@@ -31,7 +31,7 @@ def to_bbcode(bio):
 
 def edit(artist, pth):
     data = {'action' : 'edit',
-            'auth' : pth_auth,
+            'auth' : pth.authkey,
             'artistid' : artist.id,
             'body' : artist.bio,
             'image' : artist.image,

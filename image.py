@@ -3,7 +3,7 @@ import mechanize
 from contextlib2 import suppress
 from cStringIO import StringIO
 from classes import Artist, Album
-from config import artist_page, torrents_page, pth_auth, ptpimg_api_key
+from config import artist_page, torrents_page, ptpimg_api_key
 
 
 def missing(image):
@@ -12,7 +12,7 @@ def missing(image):
 
 def bad_host(image):
     # are there any other white-listed hosts?:
-    return image.find('ptpimg.me') == -1 and image.find('imgur.com') == -1
+    return image.find('ptpimg.me') == -1 and image.find('imgur.com') == -1 and image.find('lut.im') == -1 and image.find('sli.mg') == -1
 
 
 def broken_link(image):
@@ -60,7 +60,7 @@ def get(target, lastfm):
 
 def edit(target, pth):
     url = target.edit_url
-    r = pth.session.get(url, data={'auth': pth_auth})
+    r = pth.session.get(url, data={'auth': pth.authkey})
     forms = mechanize.ParseFile(StringIO(r.text.encode('utf-8')), url)
 
     form = get_image_field(forms)
@@ -123,7 +123,7 @@ def fix(target, pth, lastfm):
                 new_image = True
         else:
             new_image = False
-        if pth_auth is not None:
+        if pth.authkey is not None:
             if needs_rehost(target.image):
                 if not new_image:
                     print target.image

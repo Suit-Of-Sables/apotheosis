@@ -19,6 +19,7 @@ def main():
                                   api_secret=config.api_secret)
     # pth connection
     pth = pthapi.PthAPI(config.pth_username, config.pth_password)
+    print "authkey= ", pth.authkey, "\n"
 
     if len(sys.argv) > 2 and sys.argv[1] == '-C':
         collage_id = sys.argv[2]
