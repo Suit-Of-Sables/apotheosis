@@ -12,7 +12,7 @@ def missing(image):
 
 def bad_host(image):
     # are there any other white-listed hosts?:
-    return image.find('ptpimg.me') == -1 and image.find('imgur.com') == -1 and image.find('lut.im') == -1 and image.find('sli.mg') == -1
+    return image.find('ptpimg.me') == -1 and image.find('imgur.com') == -1 and image.find('lut.im') == -1
 
 
 def broken_link(image):
